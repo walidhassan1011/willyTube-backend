@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./Routes/Users.js";
 import videoRoutes from "./Routes/Videos.js";
+import cors from "cors";
 import commentRoutes from "./Routes/Comments.js";
 import authRoutes from "./Routes/auth.js";
 import cookieParser from "cookie-parser";
@@ -10,6 +11,7 @@ import cookieParser from "cookie-parser";
 //---------------------------------------------------------------------------------//
 const app = express();
 dotenv.config();
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 const connect = () => {

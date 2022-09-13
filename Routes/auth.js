@@ -1,7 +1,8 @@
 import express from "express";
 import { signin, signup } from "../Controllers/auth.js";
 const router = express.Router();
-
+import cookieParser from "cookie-parser";
+router.use(cookieParser());
 //create a new user
 
 router.post("/signup", signup);
