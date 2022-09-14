@@ -41,3 +41,27 @@ export const signin = async (req, res, next) => {
     next(err);
   }
 };
+
+export const google = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+      const token = Jwt.sign(
+        { email: user.email, _id: user._id },
+        process.env.JWT_SECRET
+      );
+
+      res.status(200).json({ ...user._doc, token });
+    } else {
+      const newUser = new User({ ...req.body, fromGoogle: true });
+      const savedUser = await newUser.save();
+      const token = Jwt.sign(
+        { email: newUser.email, _id: savedUser._id },
+        process.env.JWT_SECRET
+      );
+      res.status(200).send({ ...savedUser, token });
+    }
+  } catch (err) {
+    next(err);
+  }
+};

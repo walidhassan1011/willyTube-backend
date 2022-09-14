@@ -56,19 +56,21 @@ export const subscribe = async (req, res, next) => {
 };
 export const unsubscribe = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user._id, {
-      $pull: { subscribedUsers: req.params.id },
-    });
     await User.findByIdAndUpdate(req.params.id, {
       $inc: { subscribers: -1 },
     });
+    await User.findByIdAndUpdate(req.user._id, {
+      $pull: { subscribedUsers: req.params.id },
+    });
+
     res.status(200).json("unsubscription successful!");
   } catch (err) {
     next(err);
   }
 };
 export const like = async (req, res, next) => {
-  const videoId = req.params.id;
+  const videoId = req.params.videoId;
+
   const userId = req.user._id;
   try {
     await Video.findByIdAndUpdate(videoId, {
@@ -81,7 +83,7 @@ export const like = async (req, res, next) => {
   }
 };
 export const dislike = async (req, res, next) => {
-  const videoId = req.params.id;
+  const videoId = req.params.videoId;
   const userId = req.user._id;
   try {
     await Video.findByIdAndUpdate(videoId, {
